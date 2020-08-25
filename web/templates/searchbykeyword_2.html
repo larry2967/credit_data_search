@@ -1,0 +1,113 @@
+{% extends 'site-template-ch.html' %}
+
+{% block body %}
+<div id="page-wrapper">
+<!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                段落搜尋2<small></small>
+            </h1>
+        </div>
+    </div>
+<!-- /.row -->
+    <div class="card shadow mb-4">
+        <form class="form-inline" method="post" action="" >
+            <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+                <div class="input text">
+                    {{ form.keyword.label }}{{ form.keyword }}
+                </div>
+                <div class="input submit">
+                    <input type="submit" value="送出">
+                </div>
+            </div>
+        </form>
+        <div class="card-body">
+            <h2>• 徵信報告</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="2%">日期</th>  
+                            <th width="8%">案件編號</th>
+                            <th width="10%">產業別</th>
+                            <th width="15%">公司名稱</th>
+                            <th width="5%">中心</th>
+                            <th width="62%">報告摘要</th>
+                            <th width="2%">檔案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in ES %}
+                        <tr>
+                            <td width="2%">
+                                <!--{{ item['doc_date']}}-->
+                            </td>
+                            <td width="8%">
+                                <!--{{ item['key']}}-->
+                            </td>
+                            <td width="10%">
+                                <!--{{ item['business']}}-->
+                            </td>
+                            <td width="15%">
+                                <!-- {{ item['dex']}} -->
+                            </td>
+                            <td width="5%">
+                                <!-- {{ item['營業單位']}} -->
+                            </td>
+                            <td width="62%">
+                                <!-- {{ item['text']}} -->
+                            </td>
+                            <td width="2%">
+                                <a href="file:///I:/99_公用區_不分組/03_CRV個人資料夾/潔熹/cf_credit_data/{{ item['filename'] }}" download>檔案</a>
+                            </td>
+                        </tr>                             
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <h2>• 周記</h2>
+                <table class="table table-bordered table-hover table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="5%">日期</th>  
+                            <th width="5%">分類</th>
+                            <th width="10%">中心</th>
+                            <th width="10%">未來景氣</th>
+                            <th width="70%">周記內容/景氣變化</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in week %}
+                        <tr>
+                            <td width="5%">
+                                {{ item['date']}}
+                            </td>
+                            <td width="5%">
+                                {{ item['category']}}
+                            </td>
+                            <td width="10%">
+                                {{ item['center']}}
+                            </td>
+                            <td width="10%">
+                                {{ item['future_view']}}
+                            </td>
+                            <td width="70%">
+                                {{ item['content']}}
+                            </td>
+                        </tr>                             
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <!-- /.row -->
+    </div>
+		<!-- /.container-fluid -->
+
+</div>
+<!-- /#page-wrapper -->
+{% endblock %}

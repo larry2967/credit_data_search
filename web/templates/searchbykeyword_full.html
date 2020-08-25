@@ -1,0 +1,138 @@
+<!-- 模板繼承 -->
+{% extends 'site-template-ch.html' %}
+<link href = "../static/css/hight_light.css" ref="stylesheet">
+{% block body %}
+<div id="page-wrapper">
+    <!-- Page Heading -->
+    <div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">
+				全文搜尋<small></small>
+			</h1>
+		</div>
+	</div>
+	<!-- /.row -->
+	<div class="card shadow mb-4">
+		<form method="post" action="" >
+			<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+				<div class="input text">
+					{{ form.keyword.label }}{{ form.keyword }}
+                    <div class="input submit">
+                        <input type="submit" value="送出">
+                    </div>
+				</div>
+			</div>
+		</form>
+		<div class="card-body">
+			<div class="table-responsive">
+                <h2>• 徵信<em>報告</em></h2>
+				<table class="table table-bordered table-hover table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+						<tr>
+                            <th width="2%">日期</th>
+                            <th width="8%">案件編號</th>
+                            <th width="10%">產業別</th>
+                            <th width="15%">公司名稱</th>
+                            <th width="5%">中心</th>
+                            <th width="62%">報告摘要</th>
+						</tr>
+					</thead>
+<!--   ES為後端回傳的es搜尋結果，為一個list，使用for迴圈印出每一項結果        -->
+					<tbody>
+                        {% for item in ES %}
+						<tr>
+                            <td width="2%">
+                                {{ item['doc_date']}}
+							</td>
+                            <td width="8%">
+                                {{ item['key']}}
+							</td>
+							<td width="10%">
+								{{ item['business']}}
+							</td>
+							<td width="15%">
+								{{ item['dex']}}
+							</td>
+							<td width="5%">
+								{{ item['營業單位']}}
+							</td>
+							<td width="62%">
+								<button  onclick="ClickText()" class="collapsible" data-postid={{ item['id'] }}>
+                                    {% for hits in item['high_light'] %}
+                                        <p>{{ hits[:180] | safe }}</p>
+                                    {% endfor %}
+                                    <p style="color: #004d80; font-size: 12px;">......點擊展開全文</p>
+                                </button>
+                                <div class="content" style="font-size: 10px;">
+                                    <p>{{ item['text_paragraph'] |safe  }}</p>
+                                </div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+                <h2>• 周記</h2>
+                <table class="table table-bordered table-hover table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="5%">日期</th>  
+                            <th width="5%">分類</th>
+                            <th width="10%">中心</th>
+                            <th width="10%">未來景氣</th>
+                            <th width="70%">周記內容/景氣變化</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in week %}
+                        <tr>
+                            <td width="5%">
+                                {{ item['date']}}
+                            </td>
+                            <td width="5%">
+                                {{ item['category']}}
+                            </td>
+                            <td width="10%">
+                                {{ item['center']}}
+                            </td>
+                            <td width="10%">
+                                {{ item['future_view']}}
+                            </td>
+                            <td width="70%">
+                                {{ item['content']}}
+                            </td>
+                        </tr>                             
+                    {% endfor %}
+                    </tbody>
+                </table>
+			</div>
+            
+		</div>
+	</div>
+	<div class="container-fluid">
+    </div>
+</div>
+<!-- /#page-wrapper -->
+
+<!-- 
+  這個js寫的是去讀每一個全文都一個button的情況下，
+  每一個button都assign一個id，當該id的button被點擊才展開
+-->
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling
+            if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+            } 
+            else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            } 
+      });
+    }
+
+</script>
+{% endblock %}
